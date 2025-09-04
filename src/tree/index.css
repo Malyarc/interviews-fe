@@ -1,0 +1,15 @@
+.tree {
+    background-color: #efefef;
+    height: 100%;
+    padding: 10px;
+    font-family: monospace
+}
+
+.tree ul {
+  list-style: none;
+  padding-left: 5ch;
+}
+
+.tree > ul { 
+  padding-left: 0;
+}
