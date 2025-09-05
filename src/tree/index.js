@@ -2,27 +2,26 @@ import React from 'react';
 import './index.css'
 import data from './data.json'
 
+function generateTree(data) {
+  if (!data) return null;
+  return (
+    <ul>
+      {Object.entries(data).map(([key, value]) => (
+        <li key={key}>
+          {key}
+          {generateTree(value)}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+
 export default function Tree() {
   return (
     <div className="tree">
-      <ul>
-        <li>mammals
-          <ul>
-            <li>cheetah</li>
-            <li>bear
-              <ul>
-                <li>lion</li>
-                <li>dog
-                  <ul>
-                    <li>elephant</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li>ape</li>
-          </ul>
-        </li>
-      </ul>
+      mammals<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cheetah <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bear <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lion <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dog <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elephant <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ape <br />
+      {generateTree(data)}
     </div>
   )
 }
