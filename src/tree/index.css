@@ -6,10 +6,14 @@
 }
 
 .tree ul {
-  list-style: none;
-  padding-left: 5ch;
+    list-style: none;
+    padding-left: 5ch;
 }
 
-.tree > ul { 
-  padding-left: 0;
+.tree>ul {
+    padding-left: 0;
+}
+
+.inputBox {
+    margin: 2px 0px 2px 8px;
 }

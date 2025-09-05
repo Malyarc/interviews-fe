@@ -1,27 +1,78 @@
-import React from 'react';
-import './index.css'
-import data from './data.json'
+import React, { useState } from "react";
+import "./index.css";
+import data from "./data.json";
 
-function generateTree(data) {
-  if (!data) return null;
+const TreeNode = ({ name, value, path, addInput }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      addInput(path, inputValue.trim());
+      setInputValue("");
+    }
+  };
+
+  return (
+    <li>
+      {name}
+      <input
+        type="text"
+        className="inputBox"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <GenerateTree tree={value} path={path} addInput={addInput} />
+    </li>
+  );
+};
+
+
+const GenerateTree = ({ tree, path, addInput }) => {
+  if (!tree) return null;
+
   return (
     <ul>
-      {Object.entries(data).map(([key, value]) => (
-        <li key={key}>
-          {key}
-          {generateTree(value)}
-        </li>
+      {Object.entries(tree).map(([key, value]) => (
+        <TreeNode
+          key={[...path, key].join("-")}
+          name={key}
+          value={value}
+          path={[...path, key]}
+          addInput={addInput}
+        />
       ))}
     </ul>
   );
-}
+};
 
 
-export default function Tree() {
+const Tree = () => {
+  const [tree, setTree] = useState(data);
+
+  const addChild = (path, childName, currentNode) => {
+    const [first, ...rest] = path;
+    const newNode = { ...currentNode };
+
+    if (rest.length === 0) {
+      newNode[first] = newNode[first] || {};
+      newNode[first] = { ...newNode[first], [childName]: null };
+    } else {
+      newNode[first] = addChild(rest, childName, newNode[first]);
+    }
+
+    return newNode;
+  };
+
+  const handleAddInput = (path, childName) => {
+    setTree((prevTree) => addChild(path, childName, prevTree));
+  };
+
   return (
     <div className="tree">
-      mammals<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cheetah <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bear <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lion <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dog <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elephant <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ape <br />
-      {generateTree(data)}
+      <GenerateTree tree={tree} path={[]} addInput={handleAddInput} />
     </div>
-  )
-}
+  );
+};
+
+export default Tree;
